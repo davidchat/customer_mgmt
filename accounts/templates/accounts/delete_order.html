@@ -1,0 +1,23 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card card-body">
+				<p>Are you sure you want to delete "{{ order }}?"</p>
+				<p><small>This action cannot be undone.</small></p>
+
+				<form method='POST'>
+					{% csrf_token %}
+					<button class="btn btn-danger" type="submit">Delete</button>
+					<a class="btn btn-secondary" href="{% url 'accounts:home' %}">Cancel</a>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}
