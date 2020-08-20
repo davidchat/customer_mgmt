@@ -22,7 +22,7 @@ def register_page(request):
 			username = form.cleaned_data.get('username')
 
 			messages.success(request, 'Account successfully created for ' + username + "!")
-			return redirect('accounts:login')
+			return redirect('login')
 
 	context = {'form': form}
 	return render(request, 'accounts/register.html', context)
@@ -38,7 +38,7 @@ def login_page(request):
 
 		if user is not None:
 			login(request, user)
-			return redirect('accounts:home')
+			return redirect('home')
 		else:
 			messages.info(request, 'Incorrect username or password.')
 
@@ -49,16 +49,10 @@ def login_page(request):
 
 def logout_page(request):
 	logout(request)
-	return redirect('accounts:login')
+	return redirect('login')
 
 
-@login_required(login_url='accounts:login')
-def user_page(request):
-	context = {}
-	return render(request, 'accounts/user.html', context)
-
-
-@login_required(login_url='accounts:login')
+@login_required(login_url='login')
 def home(request):
 	orders = Order.objects.all()
 	customers = Customer.objects.all()
@@ -78,14 +72,14 @@ def home(request):
 	return render(request, 'accounts/dashboard.html', context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='login')
 def products(request):
 	products = Product.objects.all()
 	context = {'products': products}
 	return render(request, 'accounts/products.html', context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='login')
 def customer(request, pk):
 	customer = get_object_or_404(Customer, id=pk)
 	orders = customer.order_set.all()
@@ -103,7 +97,7 @@ def customer(request, pk):
 	return render(request, 'accounts/customer.html', context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='login')
 def create_order(request, pk):
 	# Set up the inline formset with Parent model, Child model, and fields
 	OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=8)
@@ -123,7 +117,7 @@ def create_order(request, pk):
 	return render(request, 'accounts/order_form.html', context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='login')
 def update_order(request, pk):
 	order = get_object_or_404(Order, id=pk)
 	
@@ -139,7 +133,7 @@ def update_order(request, pk):
 	return render(request, 'accounts/order_form.html', context)
 
 
-@login_required(login_url='accounts:login')
+@login_required(login_url='login')
 def delete_order(request, pk):
 	order = get_object_or_404(Order, id=pk)
 	if request.method == 'POST':
