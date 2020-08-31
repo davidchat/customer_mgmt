@@ -1,10 +1,33 @@
 <style>
 	.white-text {
 		color: Whitesmoke;
+  }
+  footer {
+    width: 100%;
+    background: #111;
+    margin-top: 0.75rem;
 	}
+  ul {
+    padding: 0.75rem;
+    text-align: center;
+  }
+  ul li {
+    list-style-type: none;
+    display: inline-block;
+    margin: 0.25rem 0.25rem;
+  }
+  ul a {
+    color: Grey;
+  }
+  ul a:hover {
+    color: Gainsboro;
+  }
+  .copyright {
+    padding: 0.5rem;
+  }
 </style>
 
-<footer class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- <footer class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
     <div class="w-100 mx-auto">
       <ul class="navbar-nav mx-auto">
@@ -20,7 +43,18 @@
       <p class="white-text">© 2020 David Chatelain</p>
     </div>
   </div>
-</footer>
+</footer> -->
 <!-- <div class="bg-dark centered sticky-bottom">
   <p class="white-text">© 2020 David Chatelain</p>
 </div> -->
+
+<footer class="bg-dark centered">
+  <ul>
+    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Dashboard</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'products' %}">Products</a></li>
+  </ul>
+  <div class="bg-dark centered text-center copyright">
+    <p class="white-text">© 2020 David Chatelain</p>
+  </div>
+</footer>
+

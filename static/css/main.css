@@ -5,6 +5,15 @@
 body{
 	background-color: #ebeff5;
 	/*background-color: #b5cce3;*/
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+.content {
+	flex: 1;
+}
+footer {
+	flex-shrink: 0;
 }
 
 #left-card {
