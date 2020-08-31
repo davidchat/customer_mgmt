@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import *
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CustomerForm, ProductForm, CreateUserForm
 from .filters import OrderFilter
 from .decorators import unauthenticated_user
 
@@ -130,7 +130,7 @@ def update_order(request, pk):
 		form = OrderForm(instance=order)
 
 	context = {'form': form}
-	return render(request, 'accounts/order_form.html', context)
+	return render(request, 'accounts/update_order.html', context)
 
 
 @login_required(login_url='login')
@@ -142,3 +142,87 @@ def delete_order(request, pk):
 
 	context = {'order': order}
 	return render(request, 'accounts/delete_order.html', context)
+
+
+@login_required(login_url='login')
+def create_customer(request):
+	form = CustomerForm
+
+	if request.method == 'POST':
+		form = CustomerForm(data=request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+
+	context = {'form': form}
+	return render(request, 'accounts/customer_form.html', context)
+
+
+@login_required(login_url='login')
+def update_customer(request, pk):
+	customer = get_object_or_404(Customer, id=pk)
+	
+	if request.method == 'POST':
+		form = CustomerForm(data=request.POST, instance=customer)
+		if form.is_valid():
+			form.save()
+			return redirect('/')
+	else:
+		form = CustomerForm(instance=customer)
+
+	context = {'form': form}
+	return render(request, 'accounts/update_customer.html', context)
+
+
+@login_required(login_url='login')
+def delete_customer(request, pk):
+	customer = get_object_or_404(Customer, id=pk)
+	if request.method == 'POST':
+		customer.delete()
+		return redirect('/')
+
+	context = {'customer': customer}
+	return render(request, 'accounts/delete_customer.html', context)
+
+
+@login_required(login_url='login')
+def create_product(request):
+	form = ProductForm
+
+	if request.method == 'POST':
+		form = ProductForm(data=request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('products')
+
+	context = {'form': form}
+	return render(request, 'accounts/product_form.html', context)
+
+
+@login_required(login_url='login')
+def update_product(request, pk):
+	product = get_object_or_404(Product, id=pk)
+	
+	if request.method == 'POST':
+		form = ProductForm(data=request.POST, instance=product)
+		if form.is_valid():
+			form.save()
+			return redirect('products')
+	else:
+		form = ProductForm(instance=product)
+
+	context = {'form': form}
+	return render(request, 'accounts/update_product.html', context)
+
+
+@login_required(login_url='login')
+def delete_product(request, pk):
+	product = get_object_or_404(Product, id=pk)
+	if request.method == 'POST':
+		product.delete()
+		return redirect('products')
+
+	context = {'product': product}
+	return render(request, 'accounts/delete_product.html', context)
+
+

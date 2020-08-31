@@ -1,27 +1,26 @@
 <style>
-	.footer {
-		background-color: black;
-	}
 	.white-text {
-		color: white;
+		color: Whitesmoke;
 	}
-  .centered {
-    text-align: center;
-  }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<footer class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container">
-    <ul class="navbar-nav mx-auto">
-      <li class="nav-item mx-auto">
-        <a class="nav-link" href="{% url 'home' %}">Home</a>
-      </li>
-      <li class="nav-item mx-auto">
-        <a class="nav-link" href="{% url 'products' %}">Products</a>
-      </li>
-    </ul>
+    <div class="w-100 mx-auto">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item mx-auto">
+          <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
+        </li>
+        <li class="nav-item mx-auto">
+          <a class="nav-link" href="{% url 'products' %}">Products</a>
+        </li>
+      </ul>
+    </div>
+    <div class="w-100 mx-auto">
+      <p class="white-text">© 2020 David Chatelain</p>
+    </div>
   </div>
-</nav>
-<div class="bg-dark centered">
+</footer>
+<!-- <div class="bg-dark centered sticky-bottom">
   <p class="white-text">© 2020 David Chatelain</p>
-</div>
+</div> -->

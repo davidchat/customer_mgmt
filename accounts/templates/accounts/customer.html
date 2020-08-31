@@ -7,18 +7,18 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md">
-			<div class="card card-body">
-				<h5>Customer: {{ customer.name }}</h5>
+			<div class="card card-body mb-3 text-white" id="left-card">
+				<h5 class="text-center">Customer: {{ customer.name }}</h5>
 				<hr>
 				<a class="btn btn-success  btn-sm btn-block" href="{% url 'create_order' customer.pk %}">Place Order</a>
-				<a class="btn btn-info  btn-sm btn-block" href="">Update Customer</a>
-				<a class="btn btn-danger  btn-sm btn-block" href="">Delete Customer</a>
+				<a class="btn btn-info  btn-sm btn-block" href="{% url 'update_customer' customer.pk %}">Update Customer</a>
+				<a class="btn btn-danger  btn-sm btn-block" href="{% url 'delete_customer' customer.pk %}">Delete Customer</a>
 			</div>
 		</div>
 
 		<div class="col-md">
-			<div class="card card-body">
-				<h5>Contact Information</h5>
+			<div class="card card-body mb-3 text-white" id="middle-card">
+				<h5 class="text-center">Contact Information</h5>
 				<hr>
 				<p><strong>Email: </strong>{{ customer.email }}</p>
 				<p><strong>Phone: </strong>{{customer.phone }}</p>
@@ -26,8 +26,8 @@
 		</div>
 
 		<div class="col-md">
-			<div class="card card-body">
-				<h5>Total Orders</h5>
+			<div class="card card-body mb-3 text-white" id="right-card">
+				<h5 class="text-center">Total Orders</h5>
 				<hr>
 				<h1 style="text-align: center; padding: 10px">{{ order_count }}</h1>
 			</div>
@@ -51,7 +51,7 @@
 
 	<div class="row">
 		<div class="col-md">
-			<div class="card card-body">
+			<div class="card card-body mb-4">
 				<table class="table table-sm">
 					<tr>
 						<th>Product</th>

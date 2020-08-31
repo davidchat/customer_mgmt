@@ -8,13 +8,13 @@
   }
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
   <a href="{% url 'home' %}"><img src="{% static 'images/davidc_logo2.png' %}"></a>
   
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="{% url 'home' %}">Dashboard <span class="sr-only">(current)</span></a>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'home' %}">Dashboard</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'products' %}">Products</a>
@@ -31,7 +31,7 @@
         <a class="nav-link" href="{% url 'logout' %}">Log out</a>
       </li> -->
     <span class="nav-item" style="color:silver"><small>Hello, {{ request.user }}</small></span>
-    <span class="nav-link"><a style="color:silver" href="{% url 'logout' %}">Log out</a></span>
+    <span class="nav-link"><a class="nav-link" id="bar-link" href="{% url 'logout' %}">Log out</a></span>
   {% endif %}
   </div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

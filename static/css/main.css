@@ -4,17 +4,28 @@
 
 body{
 	background-color: #ebeff5;
+	/*background-color: #b5cce3;*/
 }
 
-#total-orders{
-	background-color: #4cb4c7;
+#left-card {
+	/*background-color: #4cb4c7;*/
+	background-color: #0086b3;
 }
 
-#orders-delivered{
-	background-color: #7abecc;
+#middle-card {
+	/*background-color: #7abecc;*/
+	background-color: #00b3b3;
 }
 
-#orders-pending{
-	background-color: #7CD1C0;
+#right-card {
+	/*background-color: #7CD1C0;*/
+	background-color: #00cc99;
 }
 
+#bar-link {
+	color: silver;
+}
+
+#bar-link:hover {
+	color: #E8E8E8;
+}
