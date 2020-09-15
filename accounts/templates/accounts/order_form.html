@@ -11,11 +11,7 @@
 				<br>
 				<form method="POST">
 					{% csrf_token %}
-					{{ formset.management_form|crispy }}
-					{% for form in formset %}
-						{{ form|crispy }}
-						<hr>
-					{% endfor %}
+					{{ form|crispy }}
 					<input class="btn btn-info" type="submit" name="Submit">
 				</form>
 			</div>

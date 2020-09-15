@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -10,6 +10,7 @@ from .models import *
 from .forms import OrderForm, CustomerForm, ProductForm, CreateUserForm
 from .filters import OrderFilter
 from .decorators import unauthenticated_user
+
 
 @unauthenticated_user
 def register_page(request):
@@ -54,8 +55,8 @@ def logout_page(request):
 
 @login_required(login_url='login')
 def home(request):
-	orders = Order.objects.all()
-	customers = Customer.objects.all()
+	orders = Order.objects.filter(owner=request.user)
+	customers = Customer.objects.filter(owner=request.user)
 	total_customers = customers.count()
 	total_orders = orders.count()
 	delivered = orders.filter(status='Delivered').count()
@@ -74,7 +75,7 @@ def home(request):
 
 @login_required(login_url='login')
 def products(request):
-	products = Product.objects.all()
+	products = Product.objects.filter(owner=request.user)
 	context = {'products': products}
 	return render(request, 'accounts/products.html', context)
 
@@ -82,6 +83,9 @@ def products(request):
 @login_required(login_url='login')
 def customer(request, pk):
 	customer = get_object_or_404(Customer, id=pk)
+	# Make sure the customer belongs to the current user.
+	if customer.owner != request.user:
+		raise Http404
 	orders = customer.order_set.all()
 	order_count = orders.count()
 
@@ -99,21 +103,22 @@ def customer(request, pk):
 
 @login_required(login_url='login')
 def create_order(request, pk):
-	# Set up the inline formset with Parent model, Child model, and fields
-	OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=8)
 	customer = get_object_or_404(Customer, id=pk)
-	# Queryset argument here takes out previous orders from displayed forms
-	formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
-	# form = OrderForm(initial={'customer': customer})
-
+	form = OrderForm(initial={'customer': customer}) 
+	form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
+	form.fields['product'].queryset = Product.objects.filter(owner=request.user)
+	
 	if request.method == 'POST':
-		# form = OrderForm(data=request.POST)
-		formset = OrderFormSet(data=request.POST, instance=customer)
-		if formset.is_valid():
-			formset.save()
+		form = OrderForm(data=request.POST)
+		form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
+		form.fields['product'].queryset = Product.objects.filter(owner=request.user)
+		if form.is_valid():
+			new_order = form.save(commit=False)
+			new_order.owner = request.user
+			new_order.save()
 			return redirect('/')
 
-	context = {'formset': formset}
+	context = {'form': form}
 	return render(request, 'accounts/order_form.html', context)
 
 
@@ -121,13 +126,22 @@ def create_order(request, pk):
 def update_order(request, pk):
 	order = get_object_or_404(Order, id=pk)
 	
-	if request.method == 'POST':
-		form = OrderForm(data=request.POST, instance=order)
-		if form.is_valid():
-			form.save()
-			return redirect('/')
+	if order.owner != request.user:
+		raise Http404
 	else:
-		form = OrderForm(instance=order)
+		if request.method == 'POST':
+			form = OrderForm(data=request.POST, instance=order)
+			form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
+			form.fields['product'].queryset = Product.objects.filter(owner=request.user)
+			if form.is_valid():
+				updated_order = form.save(commit=False)
+				updated_order.owner = request.user
+				updated_order.save()
+				return redirect('/')
+		else:
+			form = OrderForm(instance=order)
+			form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
+			form.fields['product'].queryset = Product.objects.filter(owner=request.user)
 
 	context = {'form': form}
 	return render(request, 'accounts/update_order.html', context)
@@ -136,9 +150,13 @@ def update_order(request, pk):
 @login_required(login_url='login')
 def delete_order(request, pk):
 	order = get_object_or_404(Order, id=pk)
-	if request.method == 'POST':
-		order.delete()
-		return redirect('/')
+
+	if order.owner != request.user:
+		raise Http404
+	else:
+		if request.method == 'POST':
+			order.delete()
+			return redirect('/')
 
 	context = {'order': order}
 	return render(request, 'accounts/delete_order.html', context)
@@ -151,7 +169,9 @@ def create_customer(request):
 	if request.method == 'POST':
 		form = CustomerForm(data=request.POST)
 		if form.is_valid():
-			form.save()
+			new_customer = form.save(commit=False)
+			new_customer.owner = request.user
+			new_customer.save()
 			return redirect('/')
 
 	context = {'form': form}
@@ -162,13 +182,18 @@ def create_customer(request):
 def update_customer(request, pk):
 	customer = get_object_or_404(Customer, id=pk)
 	
-	if request.method == 'POST':
-		form = CustomerForm(data=request.POST, instance=customer)
-		if form.is_valid():
-			form.save()
-			return redirect('/')
+	if customer.owner != request.user:
+		raise Http404
 	else:
-		form = CustomerForm(instance=customer)
+		if request.method == 'POST':
+			form = CustomerForm(data=request.POST, instance=customer)
+			if form.is_valid():
+				updated_customer = form.save(commit=False)
+				updated_customer.owner = request.user
+				updated_customer.save()
+				return redirect('/')
+		else:
+			form = CustomerForm(instance=customer)
 
 	context = {'form': form}
 	return render(request, 'accounts/update_customer.html', context)
@@ -177,9 +202,13 @@ def update_customer(request, pk):
 @login_required(login_url='login')
 def delete_customer(request, pk):
 	customer = get_object_or_404(Customer, id=pk)
-	if request.method == 'POST':
-		customer.delete()
-		return redirect('/')
+
+	if customer.owner != request.user:
+		raise Http404
+	else:
+		if request.method == 'POST':
+			customer.delete()
+			return redirect('/')
 
 	context = {'customer': customer}
 	return render(request, 'accounts/delete_customer.html', context)
@@ -192,7 +221,9 @@ def create_product(request):
 	if request.method == 'POST':
 		form = ProductForm(data=request.POST)
 		if form.is_valid():
-			form.save()
+			new_product = form.save(commit=False)
+			new_product.owner = request.user
+			new_product.save()
 			return redirect('products')
 
 	context = {'form': form}
@@ -203,13 +234,18 @@ def create_product(request):
 def update_product(request, pk):
 	product = get_object_or_404(Product, id=pk)
 	
-	if request.method == 'POST':
-		form = ProductForm(data=request.POST, instance=product)
-		if form.is_valid():
-			form.save()
-			return redirect('products')
+	if product.owner != request.user:
+		raise Http404
 	else:
-		form = ProductForm(instance=product)
+		if request.method == 'POST':
+			form = ProductForm(data=request.POST, instance=product)
+			if form.is_valid():
+				updated_product = form.save(commit=False)
+				updated_product.owner = request.user
+				updated_product.save()
+				return redirect('products')
+		else:
+			form = ProductForm(instance=product)
 
 	context = {'form': form}
 	return render(request, 'accounts/update_product.html', context)
@@ -218,9 +254,12 @@ def update_product(request, pk):
 @login_required(login_url='login')
 def delete_product(request, pk):
 	product = get_object_or_404(Product, id=pk)
-	if request.method == 'POST':
-		product.delete()
-		return redirect('products')
+	if product.owner != request.user:
+		raise Http404
+	else:
+		if request.method == 'POST':
+			product.delete()
+			return redirect('products')
 
 	context = {'product': product}
 	return render(request, 'accounts/delete_product.html', context)

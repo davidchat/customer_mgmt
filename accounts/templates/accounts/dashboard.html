@@ -8,7 +8,7 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-md-5">
+		<div class="col-md-4">
 			<h5 class="text-center">CUSTOMERS</h5>
 			<hr>
 			<div class="card card-body mb-4">
@@ -18,14 +18,12 @@
 					<tr>
 						<th></th>
 						<th>Customer</th>
-						<th>Phone</th>
 					</tr>
 
 					{% for customer in customers %}
 						<tr>
 							<td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td>
 							<td>{{ customer.name }}</td>
-							<td>{{ customer.phone }}</td>
 						</tr>
 					{% endfor %}
 
@@ -33,13 +31,14 @@
 			</div>
 		</div>
 
-		<div class="col-md-7">
+		<div class="col-md-8">
 			<h5 class="text-center">ORDERS</h5>
 			<hr>
 			<div class="card card-body mb-4">
 				
 				<table class="table table-sm">
 					<tr>
+						<th>Customer</th>
 						<th>Product</th>
 						<th>Date Ordered</th>
 						<th>Status</th>
@@ -49,6 +48,7 @@
 
 					{% for order in orders %}
 						<tr>
+							<td>{{ order.customer.name }}</td>
 							<td>{{ order.product.name }}</td>
 							<td>{{ order.date_created }}</td>
 							<td>{{ order.status }}</td>

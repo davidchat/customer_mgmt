@@ -9,19 +9,19 @@ from .models import Order, Customer, Product
 class OrderForm(ModelForm):
 	class Meta:
 		model = Order
-		fields = '__all__'
+		fields = ['customer', 'product', 'status', 'note']
 
 
 class CustomerForm(ModelForm):
 	class Meta:
 		model = Customer
-		fields = '__all__'
+		fields = ['name', 'phone', 'email']
 
 
 class ProductForm(ModelForm):
 	class Meta:
 		model = Product
-		fields = '__all__'
+		fields = ['name', 'price', 'category', 'description']
 
 
 class CreateUserForm(UserCreationForm):
