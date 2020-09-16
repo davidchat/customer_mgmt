@@ -15,13 +15,13 @@ class Customer(models.Model):
 
 
 class Product(models.Model):
-	CATEGORY = (
-			('Indoor', 'Indoor'),
-			('Outdoor', 'Outdoor'),
-			)
+	# CATEGORY = (
+	# 		('Indoor', 'Indoor'),
+	# 		('Outdoor', 'Outdoor'),
+	# 		)
 	name = models.CharField(max_length=200, null=True)
 	price = models.DecimalField(max_digits=8, decimal_places=2, null=True)
-	category = models.CharField(max_length=200, null=True, choices=CATEGORY)
+	# category = models.CharField(max_length=200, null=True, choices=CATEGORY)
 	description = models.CharField(max_length=255, null=True, blank=True)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	owner = models.ForeignKey(User, on_delete=models.CASCADE)

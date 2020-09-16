@@ -1,0 +1,478 @@
+[
+    {
+        "model": "accounts.customer",
+        "pk": 1,
+        "fields": {
+            "name": "John Sample",
+            "phone": "(512) 555-1234",
+            "email": "john@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.customer",
+        "pk": 2,
+        "fields": {
+            "name": "Jane Example",
+            "phone": "(512) 555-5678",
+            "email": "jane@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.customer",
+        "pk": 3,
+        "fields": {
+            "name": "Bob Instance",
+            "phone": "(512) 555-4321",
+            "email": "bob@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.customer",
+        "pk": 4,
+        "fields": {
+            "name": "Tracy Model",
+            "phone": "(512) 555-8765",
+            "email": "tmodel@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.customer",
+        "pk": 5,
+        "fields": {
+            "name": "Tim Specimen",
+            "phone": "(512) 555-1122",
+            "email": "specimen@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.customer",
+        "pk": 6,
+        "fields": {
+            "name": "Judy Case",
+            "phone": "(512) 555-3344",
+            "email": "judy@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.customer",
+        "pk": 7,
+        "fields": {
+            "name": "Bill Exemplar",
+            "phone": "(512) 555-5566",
+            "email": "bille@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.customer",
+        "pk": 8,
+        "fields": {
+            "name": "Nancy Paragon",
+            "phone": "(512) 555-7788",
+            "email": "paragon@company.com",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+
+    {
+        "model": "accounts.product",
+        "pk": 1,
+        "fields": {
+            "name": "Excelsior Laptop",
+            "price": 749.99,
+            "description": "Sleek, elegant laptop computer by Excelsior",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 2,
+        "fields": {
+            "name": "Excelsior Mouse",
+            "price": 15.99,
+            "description": "Wireless mouse by Excelsior",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 3,
+        "fields": {
+            "name": "Excelsior Keyboard",
+            "price": 35.99,
+            "description": "Wireless keyboard by Excelsior",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 4,
+        "fields": {
+            "name": "PopHey! Mousepad",
+            "price": 12.99,
+            "description": "Durable mousepad with wrist rest",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 5,
+        "fields": {
+            "name": "PopHey! 32GB USB Flash Drive",
+            "price": 7.99,
+            "description": "USB flash drive with 32GB capacity",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 6,
+        "fields": {
+            "name": "PopHey! 64GB USB Flash Drive",
+            "price": 11.99,
+            "description": "USB flash drive with 64GB capacity",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 7,
+        "fields": {
+            "name": "PopHey! 128GB USB Flash Drive",
+            "price": 18.99,
+            "description": "USB flash drive with 128GB capacity",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 8,
+        "fields": {
+            "name": "Lucidity Laptop Computer",
+            "price": 499.99,
+            "description": "Functional budget laptop computer by Lucidity",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 9,
+        "fields": {
+            "name": "Lucidity Mouse",
+            "price": 12.99,
+            "description": "Wireless mouse by Lucidity",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.product",
+        "pk": 10,
+        "fields": {
+            "name": "Lucidity Keyboard",
+            "price": 28.99,
+            "description": "Wireless keyboard by Lucidity",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    
+    {
+        "model": "accounts.order",
+        "pk": 1,
+        "fields": {
+            "customer": "1",
+            "product": "1",
+            "status": "Pending",
+            "note": "Requires gift wrapping",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 2,
+        "fields": {
+            "customer": "1",
+            "product": "2",
+            "status": "Pending",
+            "note": "Requires gift wrapping",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 3,
+        "fields": {
+            "customer": "1",
+            "product": "3",
+            "status": "Pending",
+            "note": "Requires gift wrapping",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 4,
+        "fields": {
+            "customer": "1",
+            "product": "4",
+            "status": "Pending",
+            "note": "Requires gift wrapping",
+            "date_created": "2020-09-16 10:09:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 5,
+        "fields": {
+            "customer": "2",
+            "product": "6",
+            "status": "Pending",
+            "note": "",
+            "date_created": "2020-09-14 8:15:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 6,
+        "fields": {
+            "customer": "2",
+            "product": "9",
+            "status": "Pending",
+            "note": "",
+            "date_created": "2020-09-14 8:15:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 7,
+        "fields": {
+            "customer": "3",
+            "product": "8",
+            "status": "Out for delivery",
+            "note": "",
+            "date_created": "2020-09-18 15:42:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 8,
+        "fields": {
+            "customer": "3",
+            "product": "4",
+            "status": "Out for delivery",
+            "note": "",
+            "date_created": "2020-09-18 15:42:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 9,
+        "fields": {
+            "customer": "3",
+            "product": "5",
+            "status": "Out for delivery",
+            "note": "",
+            "date_created": "2020-09-18 15:42:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 10,
+        "fields": {
+            "customer": "4",
+            "product": "1",
+            "status": "Pending",
+            "note": "Expedited delivery",
+            "date_created": "2020-09-16 12:40:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 11,
+        "fields": {
+            "customer": "4",
+            "product": "2",
+            "status": "Pending",
+            "note": "",
+            "date_created": "2020-09-18 11:22:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 12,
+        "fields": {
+            "customer": "4",
+            "product": "3",
+            "status": "Pending",
+            "note": "",
+            "date_created": "2020-09-18 11:22:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 13,
+        "fields": {
+            "customer": "4",
+            "product": "4",
+            "status": "Pending",
+            "note": "",
+            "date_created": "2020-09-18 11:22:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 14,
+        "fields": {
+            "customer": "5",
+            "product": "7",
+            "status": "Delivered",
+            "note": "Expedited delivery",
+            "date_created": "2020-09-15 16:30:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 15,
+        "fields": {
+            "customer": "6",
+            "product": "8",
+            "status": "Delivered",
+            "note": "",
+            "date_created": "2020-09-17 13:54:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 16,
+        "fields": {
+            "customer": "6",
+            "product": "9",
+            "status": "Delivered",
+            "note": "",
+            "date_created": "2020-09-17 13:54:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 17,
+        "fields": {
+            "customer": "6",
+            "product": "10",
+            "status": "Delivered",
+            "note": "",
+            "date_created": "2020-09-17 13:54:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 18,
+        "fields": {
+            "customer": "7",
+            "product": "3",
+            "status": "Pending",
+            "note": "Expedited delivery",
+            "date_created": "2020-09-19 9:18:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 19,
+        "fields": {
+            "customer": "7",
+            "product": "7",
+            "status": "Pending",
+            "note": "Expedited delivery",
+            "date_created": "2020-09-19 9:18:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 20,
+        "fields": {
+            "customer": "8",
+            "product": "2",
+            "status": "Out for delivery",
+            "note": "",
+            "date_created": "2020-09-20 11:37:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 21,
+        "fields": {
+            "customer": "8",
+            "product": "4",
+            "status": "Out for delivery",
+            "note": "",
+            "date_created": "2020-09-20 11:37:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 22,
+        "fields": {
+            "customer": "8",
+            "product": "7",
+            "status": "Pending",
+            "note": "",
+            "date_created": "2020-09-21 15:30:00",
+            "owner": "1"
+        }
+    },
+    {
+        "model": "accounts.order",
+        "pk": 23,
+        "fields": {
+            "customer": "8",
+            "product": "10",
+            "status": "Pending",
+            "note": "",
+            "date_created": "2020-09-21 15:30:00",
+            "owner": "1"
+        }
+    }
+]

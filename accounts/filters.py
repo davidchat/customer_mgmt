@@ -9,10 +9,10 @@ class OrderFilter(django_filters.FilterSet):
 
 	class Meta:
 		model = Order
-		fields = ['product', 'product__category', 'status']
+		fields = ['product', 'status']
 		exclude = ['customer', 'date_created']
 
 
 # Strange way to customize the filter label without 
 # directly defining the filter in the class
-OrderFilter.base_filters['product__category'].label = 'Category'
+# OrderFilter.base_filters['product__category'].label = 'Category'

@@ -20,7 +20,7 @@
 						<th>Customer</th>
 					</tr>
 
-					{% for customer in customers %}
+					{% for customer in customers|dictsort:"name" %}
 						<tr>
 							<td><a class="btn btn-sm btn-info" href="{% url 'customer' customer.id %}">View</a></td>
 							<td>{{ customer.name }}</td>
@@ -46,7 +46,7 @@
 						<th>Delete</th>
 					</tr>
 
-					{% for order in orders %}
+					{% for order in orders|dictsortreversed:"date_created" %}
 						<tr>
 							<td>{{ order.customer.name }}</td>
 							<td>{{ order.product.name }}</td>

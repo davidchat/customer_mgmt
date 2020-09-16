@@ -6,13 +6,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from .models import *
+from .models import Customer, Product, Order
 from .forms import OrderForm, CustomerForm, ProductForm, CreateUserForm
 from .filters import OrderFilter
-from .decorators import unauthenticated_user
+from .decorators import send_authenticated_user_home
 
 
-@unauthenticated_user
+@send_authenticated_user_home
 def register_page(request):
 	form = CreateUserForm()
 
@@ -29,7 +29,7 @@ def register_page(request):
 	return render(request, 'accounts/register.html', context)
 
 
-@unauthenticated_user
+@send_authenticated_user_home
 def login_page(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
@@ -53,14 +53,21 @@ def logout_page(request):
 	return redirect('login')
 
 
-@login_required(login_url='login')
 def home(request):
-	orders = Order.objects.filter(owner=request.user)
-	customers = Customer.objects.filter(owner=request.user)
-	total_customers = customers.count()
-	total_orders = orders.count()
-	delivered = orders.filter(status='Delivered').count()
-	pending = orders.filter(status='Pending').count()
+	if request.user.is_authenticated:
+		orders = Order.objects.filter(owner=request.user)
+		customers = Customer.objects.filter(owner=request.user)
+		total_customers = customers.count()
+		total_orders = orders.count()
+		delivered = orders.filter(status='Delivered').count()
+		pending = orders.filter(status='Pending').count()
+	else:
+		orders = Order.objects.filter(owner=1)
+		customers = Customer.objects.filter(owner=1)
+		total_customers = customers.count()
+		total_orders = orders.count()
+		delivered = orders.filter(status='Delivered').count()
+		pending = orders.filter(status='Pending').count()
 
 	context = {
 		'orders': orders,
@@ -73,18 +80,19 @@ def home(request):
 	return render(request, 'accounts/dashboard.html', context)
 
 
-@login_required(login_url='login')
 def products(request):
-	products = Product.objects.filter(owner=request.user)
+	if request.user.is_authenticated:
+		products = Product.objects.filter(owner=request.user)
+	else:
+		products = Product.objects.filter(owner=1)
 	context = {'products': products}
 	return render(request, 'accounts/products.html', context)
 
 
-@login_required(login_url='login')
 def customer(request, pk):
 	customer = get_object_or_404(Customer, id=pk)
 	# Make sure the customer belongs to the current user.
-	if customer.owner != request.user:
+	if customer.owner.id != 1 and customer.owner != request.user:
 		raise Http404
 	orders = customer.order_set.all()
 	order_count = orders.count()
@@ -101,165 +109,214 @@ def customer(request, pk):
 	return render(request, 'accounts/customer.html', context)
 
 
-@login_required(login_url='login')
 def create_order(request, pk):
-	customer = get_object_or_404(Customer, id=pk)
-	form = OrderForm(initial={'customer': customer}) 
-	form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
-	form.fields['product'].queryset = Product.objects.filter(owner=request.user)
-	
-	if request.method == 'POST':
-		form = OrderForm(data=request.POST)
+	if request.user.is_authenticated:
+		customer = get_object_or_404(Customer, id=pk)
+		form = OrderForm(initial={'customer': customer}) 
 		form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
 		form.fields['product'].queryset = Product.objects.filter(owner=request.user)
-		if form.is_valid():
-			new_order = form.save(commit=False)
-			new_order.owner = request.user
-			new_order.save()
+		
+		if request.method == 'POST':
+			form = OrderForm(data=request.POST)
+			form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
+			form.fields['product'].queryset = Product.objects.filter(owner=request.user)
+			if form.is_valid():
+				new_order = form.save(commit=False)
+				new_order.owner = request.user
+				new_order.save()
+				return redirect('/')
+	else:
+		customer = get_object_or_404(Customer, id=pk)
+		form = OrderForm(initial={'customer': customer}) 
+		form.fields['customer'].queryset = Customer.objects.filter(owner=1)
+		form.fields['product'].queryset = Product.objects.filter(owner=1)
+
+		if request.method == 'POST':
+			messages.info(request, 'Please register to create, update, and delete your own orders!')
 			return redirect('/')
 
 	context = {'form': form}
 	return render(request, 'accounts/order_form.html', context)
 
 
-@login_required(login_url='login')
 def update_order(request, pk):
 	order = get_object_or_404(Order, id=pk)
 	
-	if order.owner != request.user:
+	if order.owner.id !=1 and order.owner != request.user:
 		raise Http404
 	else:
-		if request.method == 'POST':
-			form = OrderForm(data=request.POST, instance=order)
-			form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
-			form.fields['product'].queryset = Product.objects.filter(owner=request.user)
-			if form.is_valid():
-				updated_order = form.save(commit=False)
-				updated_order.owner = request.user
-				updated_order.save()
-				return redirect('/')
+		if request.user.is_authenticated:
+			if request.method == 'POST':
+				form = OrderForm(data=request.POST, instance=order)
+				form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
+				form.fields['product'].queryset = Product.objects.filter(owner=request.user)
+				if form.is_valid():
+					updated_order = form.save(commit=False)
+					updated_order.owner = request.user
+					updated_order.save()
+					return redirect('/')
+			else:
+				form = OrderForm(instance=order)
+				form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
+				form.fields['product'].queryset = Product.objects.filter(owner=request.user)
 		else:
-			form = OrderForm(instance=order)
-			form.fields['customer'].queryset = Customer.objects.filter(owner=request.user)
-			form.fields['product'].queryset = Product.objects.filter(owner=request.user)
+			if request.method == 'POST':
+				messages.info(request, 'Please register to create, update, and delete your own orders!')
+				return redirect('/')
+			else:
+				form = OrderForm(instance=order)
+				form.fields['customer'].queryset = Customer.objects.filter(owner=1)
+				form.fields['product'].queryset = Product.objects.filter(owner=1)
 
 	context = {'form': form}
 	return render(request, 'accounts/update_order.html', context)
 
 
-@login_required(login_url='login')
 def delete_order(request, pk):
 	order = get_object_or_404(Order, id=pk)
 
-	if order.owner != request.user:
+	if order.owner.id != 1 and order.owner != request.user:
 		raise Http404
 	else:
-		if request.method == 'POST':
-			order.delete()
-			return redirect('/')
+		if request.user.is_authenticated:
+			if request.method == 'POST':
+				order.delete()
+				return redirect('/')
+		else:
+			if request.method == 'POST':
+				messages.info(request, 'Please register to create, update, and delete your own orders!')
+				return redirect('/')
 
 	context = {'order': order}
 	return render(request, 'accounts/delete_order.html', context)
 
 
-@login_required(login_url='login')
 def create_customer(request):
 	form = CustomerForm
 
-	if request.method == 'POST':
-		form = CustomerForm(data=request.POST)
-		if form.is_valid():
-			new_customer = form.save(commit=False)
-			new_customer.owner = request.user
-			new_customer.save()
+	if request.user.is_authenticated:
+		if request.method == 'POST':
+			form = CustomerForm(data=request.POST)
+			if form.is_valid():
+				new_customer = form.save(commit=False)
+				new_customer.owner = request.user
+				new_customer.save()
+				return redirect('/')
+	else:
+		if request.method == 'POST':
+			messages.info(request, 'Please register to create, update, and delete your own customers!')
 			return redirect('/')
 
 	context = {'form': form}
 	return render(request, 'accounts/customer_form.html', context)
 
 
-@login_required(login_url='login')
 def update_customer(request, pk):
 	customer = get_object_or_404(Customer, id=pk)
 	
-	if customer.owner != request.user:
+	if customer.owner.id != 1 and customer.owner != request.user:
 		raise Http404
 	else:
-		if request.method == 'POST':
-			form = CustomerForm(data=request.POST, instance=customer)
-			if form.is_valid():
-				updated_customer = form.save(commit=False)
-				updated_customer.owner = request.user
-				updated_customer.save()
-				return redirect('/')
+		if request.user.is_authenticated:
+			if request.method == 'POST':
+				form = CustomerForm(data=request.POST, instance=customer)
+				if form.is_valid():
+					updated_customer = form.save(commit=False)
+					updated_customer.owner = request.user
+					updated_customer.save()
+					return redirect('/')
+			else:
+				form = CustomerForm(instance=customer)
 		else:
-			form = CustomerForm(instance=customer)
+			if request.method == 'POST':
+				messages.info(request, 'Please register to create, update, and delete your own customers!')
+				return redirect('/')
+			else:
+				form = CustomerForm(instance=customer)
 
 	context = {'form': form}
 	return render(request, 'accounts/update_customer.html', context)
 
 
-@login_required(login_url='login')
 def delete_customer(request, pk):
 	customer = get_object_or_404(Customer, id=pk)
 
-	if customer.owner != request.user:
+	if customer.owner.id != 1 and customer.owner != request.user:
 		raise Http404
 	else:
-		if request.method == 'POST':
-			customer.delete()
-			return redirect('/')
+		if request.user.is_authenticated:
+			if request.method == 'POST':
+				customer.delete()
+				return redirect('/')
+		else:
+			if request.method == 'POST':
+				messages.info(request, 'Please register to create, update, and delete your own orders!')
+				return redirect('/')
 
 	context = {'customer': customer}
 	return render(request, 'accounts/delete_customer.html', context)
 
 
-@login_required(login_url='login')
 def create_product(request):
 	form = ProductForm
 
-	if request.method == 'POST':
-		form = ProductForm(data=request.POST)
-		if form.is_valid():
-			new_product = form.save(commit=False)
-			new_product.owner = request.user
-			new_product.save()
+	if request.user.is_authenticated:
+		if request.method == 'POST':
+			form = ProductForm(data=request.POST)
+			if form.is_valid():
+				new_product = form.save(commit=False)
+				new_product.owner = request.user
+				new_product.save()
+				return redirect('products')
+	else:
+		if request.method == 'POST':
+			messages.info(request, 'Please register to create, update, and delete your own products!')
 			return redirect('products')
 
 	context = {'form': form}
 	return render(request, 'accounts/product_form.html', context)
 
 
-@login_required(login_url='login')
 def update_product(request, pk):
 	product = get_object_or_404(Product, id=pk)
 	
-	if product.owner != request.user:
+	if product.owner.id != 1 and product.owner != request.user:
 		raise Http404
 	else:
-		if request.method == 'POST':
-			form = ProductForm(data=request.POST, instance=product)
-			if form.is_valid():
-				updated_product = form.save(commit=False)
-				updated_product.owner = request.user
-				updated_product.save()
-				return redirect('products')
+		if request.user.is_authenticated:
+			if request.method == 'POST':
+				form = ProductForm(data=request.POST, instance=product)
+				if form.is_valid():
+					updated_product = form.save(commit=False)
+					updated_product.owner = request.user
+					updated_product.save()
+					return redirect('products')
+			else:
+				form = ProductForm(instance=product)
 		else:
-			form = ProductForm(instance=product)
+			if request.method == 'POST':
+				messages.info(request, 'Please register to create, update, and delete your own products!')
+				return redirect('products')
+			else:
+				form = ProductForm(instance=product)
 
 	context = {'form': form}
 	return render(request, 'accounts/update_product.html', context)
 
 
-@login_required(login_url='login')
 def delete_product(request, pk):
 	product = get_object_or_404(Product, id=pk)
-	if product.owner != request.user:
+	if product.owner.id != 1 and product.owner != request.user:
 		raise Http404
 	else:
-		if request.method == 'POST':
-			product.delete()
-			return redirect('products')
+		if request.user.is_authenticated:
+			if request.method == 'POST':
+				product.delete()
+				return redirect('products')
+		else:
+			if request.method == 'POST':
+				messages.info(request, 'Please register to create, update, and delete your own products!')
+				return redirect('products')
 
 	context = {'product': product}
 	return render(request, 'accounts/delete_product.html', context)

@@ -18,17 +18,17 @@
 				<table class="table">
 					<tr>
 						<th>Product</th>
-						<th>Category</th>
+						<!-- <th>Category</th> -->
 						<th>Description</th>
 						<th class="text-right">Price</th>
 						<th></th>
 						<th></th>
 					</tr>
 
-					{% for product in products %}
+					{% for product in products|dictsort:"name" %}
 						<tr>
 							<td>{{ product.name }}</td>
-							<td>{{ product.category }}</td>
+							<!-- <td>{{ product.category }}</td> -->
 							<td>{{ product.description }}</td>
 							<td class="text-right">{{ product.price }}</td>
 							<td class="text-center"><a class="btn btn-sm btn-info" href="{% url 'update_product' product.pk %}">Update</a></td>
