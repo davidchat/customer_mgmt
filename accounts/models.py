@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 class Customer(models.Model):
+	"""A model of a customer and their information"""
 	name = models.CharField(max_length=200, null=True)
 	phone = models.CharField(max_length=20, null=True)
 	email = models.EmailField(max_length=255, null=True)
@@ -15,10 +16,7 @@ class Customer(models.Model):
 
 
 class Product(models.Model):
-	# CATEGORY = (
-	# 		('Indoor', 'Indoor'),
-	# 		('Outdoor', 'Outdoor'),
-	# 		)
+	"""A model of a product and its information"""
 	name = models.CharField(max_length=200, null=True)
 	price = models.DecimalField(max_digits=8, decimal_places=2, null=True)
 	# category = models.CharField(max_length=200, null=True, choices=CATEGORY)
@@ -32,6 +30,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
+	"""A model of an order, tied to a specific customer and product"""
 	STATUS = (
 			('Pending', 'Pending'),
 			('Out for delivery', 'Out for delivery'),

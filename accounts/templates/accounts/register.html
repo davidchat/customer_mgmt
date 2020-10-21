@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
     
@@ -73,6 +74,10 @@
 	<div class="container h-100">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<a href="{% url 'home' %}"><img src="{% static 'images/manage_script_logo.png' %}"></a>
+				</div>
+				<br />
 				<div class="d-flex justify-content-center">
 					<h3 id="form-title">REGISTER ACCOUNT</h3>
 				</div>

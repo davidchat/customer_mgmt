@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     # 3rd party apps
     'crispy_forms',
     'django_filters',
+    'storages',
     # Default django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -79,10 +80,22 @@ WSGI_APPLICATION = 'customer_mgmt.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('LN_DB_NAME'),
+        'USER': config('LN_DB_USER'),
+        'PASSWORD': config('LN_DB_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -124,12 +137,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-MEDIA_URL = '/images/'
-
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static'),
 ]
+
+# MEDIA_URL = '/images/'
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -140,3 +153,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('GMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('GMAIL_PASSWORD')
+
+
+
